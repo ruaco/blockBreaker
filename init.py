@@ -117,6 +117,8 @@ class Game:
                 for i in self.actions:
                     if key[i] == 0:
                         self.keydowns[i] = False
+            if event.type == pygame.QUIT:
+                sys.exit()
 
     def register_action(self, key, func):
         self.actions[key] = func
