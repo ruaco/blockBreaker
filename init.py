@@ -11,8 +11,8 @@ class Ball:
     def __init__(self):
         self.image = pygame.image.load("images/ball.png")
         rect = self.image.get_rect()
-        self.width = rect.left - rect.right
-        self.height = rect.top - rect.bottom
+        self.width = rect.right - rect.left
+        self.height = rect.bottom - rect.top
         self.x = 100
         self.y = 200
         self.speed_x = 3
@@ -45,10 +45,11 @@ class Block:
     def __init__(self, position):
         self.image = pygame.image.load("images/block.png")
         self.alive = True
-        self.x, self.y = position
+        self.x = position[0]
+        self.y = position[1]
         rect = self.image.get_rect()
-        self.width = rect.left - rect.right
-        self.height = rect.top - rect.bottom
+        self.width = rect.right - rect.left
+        self.height = rect.bottom - rect.top
 
     def kill(self):
         self.alive = False
@@ -60,7 +61,7 @@ class Block:
         return [self.x, self.y]
 
     def collide(self, o):
-        return self.alive and rect_intersects(self, o) and rect_intersects(o, self)
+        return self.alive and (rect_intersects(self, o) or rect_intersects(o, self))
 
 
 class Paddle:
@@ -70,7 +71,7 @@ class Paddle:
         self.y = 250
         rect = self.image.get_rect()
         self.width = rect.right - rect.left
-        self.height = rect.top - rect.bottom
+        self.height = rect.bottom - rect.top
         self.speed = 5
 
     def position(self):
@@ -90,7 +91,7 @@ class Paddle:
         self.move(self.x + self.speed)
 
     def collide(self, ball):
-        return self.x < ball.x < self.x + self.width and ball.y - ball.height >= self.y
+        return rect_intersects(self, ball) or rect_intersects(ball, self)
 
 
 class Game:
@@ -99,6 +100,7 @@ class Game:
     _fps = 100
     ball = None
     paddle = None
+    blocks = []
 
     def __init__(self):
         pygame.init()
@@ -120,6 +122,12 @@ class Game:
             if event.type == pygame.QUIT:
                 sys.exit()
 
+    def slow(self):
+        self._fps = 0.5
+
+    def fast(self):
+        self._fps = 150
+
     def register_action(self, key, func):
         self.actions[key] = func
 
@@ -132,6 +140,11 @@ class Game:
         ball.move()
         if paddle.collide(ball):
             ball.rebound()
+        blocks = self.blocks
+        for i in blocks:
+            if i.collide(ball):
+                i.kill()
+                ball.rebound()
 
     def draw(self, **kwargs):
         for i in kwargs.keys():
@@ -139,11 +152,22 @@ class Game:
                 self.ball = kwargs.get(i)
             if i == 'paddle':
                 self.paddle = kwargs.get(i)
+            if i == 'blocks':
+                self.blocks = kwargs.get(i)
+
         ball = self.ball
-        paddle = self.paddle
-        if ball is not None and paddle is not None:
+        if ball is not None:
             self.draw_image(ball)
+
+        paddle = self.paddle
+        if paddle is not None:
             self.draw_image(paddle)
+
+        blocks = self.blocks
+        if len(blocks) > 0:
+            for i in blocks:
+                if i.alive:
+                    self.draw_image(i)
 
     def clear(self):
         self.screen.fill([0, 0, 0])
@@ -168,12 +192,17 @@ def __main():
 
     ball = Ball()
     paddle = Paddle()
+    blocks = []
+    for i in range(7):
+        blocks.append(Block([i*50+20, 100]))
 
     g.register_action(pygame.K_LEFT, paddle.move_left)
     g.register_action(pygame.K_RIGHT, paddle.move_right)
     g.register_action(pygame.K_SPACE, ball.fire)
     g.register_action(pygame.K_ESCAPE, sys.exit)
-    g.draw(ball=ball, paddle=paddle)
+    g.register_action(pygame.K_f, g.slow)
+    g.register_action(pygame.K_j, g.fast)
+    g.draw(ball=ball, paddle=paddle, blocks=blocks)
 
     g.run()
 
