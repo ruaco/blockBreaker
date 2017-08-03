@@ -30,9 +30,9 @@ class Ball:
 
     def move(self):
         if self.fired:
-            if self.x < 0 or self.x > 400:
+            if self.x < 0 or self.x > 400 - self.width:
                 self.speed_x *= -1
-            if self.y < 0 or self.y > 300:
+            if self.y < 0 or self.y > 300 - self.height:
                 self.speed_y *= -1
             self.x += self.speed_x
             self.y += self.speed_y
@@ -101,6 +101,7 @@ class Game:
     ball = None
     paddle = None
     blocks = []
+    score = 0
 
     def __init__(self):
         pygame.init()
@@ -134,6 +135,11 @@ class Game:
     def draw_image(self, i):
         self.screen.blit(i.image, i.position())
 
+    def draw_text(self, text, position):
+        font = pygame.font.Font(None, 20)
+        text_object = font.render(text, True, (255, 255, 255))
+        self.screen.blit(text_object, position)
+
     def update(self):
         ball = self.ball
         paddle = self.paddle
@@ -145,6 +151,7 @@ class Game:
             if i.collide(ball):
                 i.kill()
                 ball.rebound()
+                self.score += 100
 
     def draw(self, **kwargs):
         for i in kwargs.keys():
@@ -168,6 +175,8 @@ class Game:
             for i in blocks:
                 if i.alive:
                     self.draw_image(i)
+
+        self.draw_text('score: ' + str(self.score), [20, 20])
 
     def clear(self):
         self.screen.fill([0, 0, 0])
