@@ -1,111 +1,26 @@
 import pygame
 import sys
 import time
-from util import log, rect_intersects
-
-
-size = width, height = 400, 300
-
-
-class Ball:
-    def __init__(self):
-        self.image = pygame.image.load("images/ball.png")
-        rect = self.image.get_rect()
-        self.width = rect.right - rect.left
-        self.height = rect.bottom - rect.top
-        self.x = 100
-        self.y = 200
-        self.speed_x = 3
-        self.speed_y = 3
-        self.fired = False
-
-    def size(self):
-        return [self.width, self.height]
-
-    def position(self):
-        return [self.x, self.y]
-
-    def fire(self):
-        self.fired = True
-
-    def move(self):
-        if self.fired:
-            if self.x < 0 or self.x > 400 - self.width:
-                self.speed_x *= -1
-            if self.y < 0 or self.y > 300 - self.height:
-                self.speed_y *= -1
-            self.x += self.speed_x
-            self.y += self.speed_y
-
-    def rebound(self):
-        self.speed_y *= -1
-
-
-class Block:
-    def __init__(self, position):
-        self.image = pygame.image.load("images/block.png")
-        self.alive = True
-        self.x = position[0]
-        self.y = position[1]
-        rect = self.image.get_rect()
-        self.width = rect.right - rect.left
-        self.height = rect.bottom - rect.top
-
-    def kill(self):
-        self.alive = False
-
-    def size(self):
-        return [self.width, self.height]
-
-    def position(self):
-        return [self.x, self.y]
-
-    def collide(self, o):
-        return self.alive and (rect_intersects(self, o) or rect_intersects(o, self))
-
-
-class Paddle:
-    def __init__(self):
-        self.image = pygame.image.load("images/paddle.png")
-        self.x = 100
-        self.y = 250
-        rect = self.image.get_rect()
-        self.width = rect.right - rect.left
-        self.height = rect.bottom - rect.top
-        self.speed = 5
-
-    def position(self):
-        return [self.x, self.y]
-
-    def move(self, x):
-        if x < 0:
-            x = 0
-        if x > 400 - self.width:
-            x = 400 - self.width
-        self.x = x
-
-    def move_left(self):
-        self.move(self.x - self.speed)
-
-    def move_right(self):
-        self.move(self.x + self.speed)
-
-    def collide(self, ball):
-        return rect_intersects(self, ball) or rect_intersects(ball, self)
+from ball import Ball
+from paddle import Paddle
+from block import Block
 
 
 class Game:
+    _size = width, height = 400, 300
+    _fps = 100
+
     actions = {}
     keydowns = {}
-    _fps = 100
+    score = 0
+
     ball = None
     paddle = None
     blocks = []
-    score = 0
 
     def __init__(self):
         pygame.init()
-        screen = pygame.display.set_mode(size)
+        screen = pygame.display.set_mode(self._size)
         self.screen = screen
 
     def event_listener(self):
@@ -122,12 +37,6 @@ class Game:
                         self.keydowns[i] = False
             if event.type == pygame.QUIT:
                 sys.exit()
-
-    def slow(self):
-        self._fps = 0.5
-
-    def fast(self):
-        self._fps = 150
 
     def register_action(self, key, func):
         self.actions[key] = func
@@ -209,8 +118,6 @@ def __main():
     g.register_action(pygame.K_RIGHT, paddle.move_right)
     g.register_action(pygame.K_SPACE, ball.fire)
     g.register_action(pygame.K_ESCAPE, sys.exit)
-    g.register_action(pygame.K_f, g.slow)
-    g.register_action(pygame.K_j, g.fast)
     g.draw(ball=ball, paddle=paddle, blocks=blocks)
 
     g.run()
