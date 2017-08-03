@@ -1,4 +1,5 @@
 import pygame
+from util import rect_intersects
 
 
 class Block:
