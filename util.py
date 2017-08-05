@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 
 def log(*args, **kwargs):
@@ -13,6 +14,12 @@ def rect_intersects(a, b):
         if o.x < b.x < o.x + o.width:
             return True
     return False
+
+
+def load_config_from_file():
+    file_path = 'config.json'
+    with open(file_path, 'r', newline='', encoding='utf-8') as f:
+        return json.load(f)
 
 
 class Rect:
@@ -37,3 +44,4 @@ def __test():
 
 if __name__ == '__main__':
     __test()
+    print(load_config_from_file())
