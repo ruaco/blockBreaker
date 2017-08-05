@@ -1,7 +1,7 @@
 import pygame
 import sys
-from scene.base_scene import BaseScene
-from scene.start_scene import StartScene
+from scene.base import BaseScene
+from scene.start import StartScene
 
 
 class EndScene(BaseScene):
@@ -20,7 +20,7 @@ class EndScene(BaseScene):
         if self.complete:
             self.draw_text('mission completed!', [130, 120])
         else:
-            self.draw_text('you failed', [130, 140])
+            self.draw_text('you failed~', [160, 120])
         self.draw_text('press R to return title scene to restart game', [70, 140])
 
     def update(self):
