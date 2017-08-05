@@ -10,14 +10,15 @@ class Game:
     config = load_config_from_file()
 
     s = None
+    score = 0
 
     def __init__(self):
         pygame.init()
         screen = pygame.display.set_mode(self._size)
         self.screen = screen
 
-    def scene(self, scene):
-        self.s = scene
+    def scene(self, new_s):
+        self.s = new_s
 
     def update(self):
         self.s.update()
