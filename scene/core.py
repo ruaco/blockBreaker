@@ -4,8 +4,9 @@ import sys
 from ball import Ball
 from paddle import Paddle
 from block import Block
-from scene.base_scene import BaseScene
-import scene.end_scene
+from scene.base import BaseScene
+import scene.start
+import scene.end
 
 
 class CoreScene(BaseScene):
@@ -72,13 +73,11 @@ class CoreScene(BaseScene):
             if len(self.game.config.get('level')) > next_level:
                 new_s = CoreScene(self.game, next_level)
                 self.game.scene(new_s)
-            # todo 这里有一个Import Error
-            # else:
-            #     new_s = StartScene(self.game)
-            #     self.game.scene(new_s)
+            else:
+                new_s = scene.end.EndScene(self.game, True)
+                self.game.scene(new_s)
         if ball.y+ball.height > self.game.height:
-            ...
-            new_s = scene.end_scene.EndScene(self.game, True)
+            new_s = scene.end.EndScene(self.game, False)
             self.game.scene(new_s)
 
         self.draw_text('score: ' + str(self.score), [20, 20])
