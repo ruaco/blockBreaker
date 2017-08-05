@@ -1,8 +1,7 @@
 import pygame
 import time
 from util import *
-from scene.core_scene import CoreScene
-from scene.start_scene import StartScene
+import scene.end
 
 
 class Game:
@@ -38,7 +37,6 @@ class Game:
 
 if __name__ == '__main__':
     g = Game()
-    # s = CoreScene(g)
-    s = StartScene(g)
+    s = scene.end.StartScene(g)
     g.scene(s)
     g.run()
