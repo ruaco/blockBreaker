@@ -26,20 +26,23 @@ class BaseScene:
         text_object = font.render(text, True, (255, 255, 255))
         self.screen.blit(text_object, position)
 
+    def listener_processor(self, event):
+        if event.type == pygame.KEYDOWN:
+            key = pygame.key.get_pressed()
+            for i in self.actions:
+                if key[i] == 1:
+                    self.keydowns[i] = True
+        if event.type == pygame.KEYUP:
+            key = pygame.key.get_pressed()
+            for i in self.actions:
+                if key[i] == 0:
+                    self.keydowns[i] = False
+        if event.type == pygame.QUIT:
+            sys.exit()
+
     def event_listener(self):
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                key = pygame.key.get_pressed()
-                for i in self.actions:
-                    if key[i] == 1:
-                        self.keydowns[i] = True
-            if event.type == pygame.KEYUP:
-                key = pygame.key.get_pressed()
-                for i in self.actions:
-                    if key[i] == 0:
-                        self.keydowns[i] = False
-            if event.type == pygame.QUIT:
-                sys.exit()
+            self.listener_processor(event)
 
     def register_action(self, key, func):
         self.actions[key] = func

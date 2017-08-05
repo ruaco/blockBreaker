@@ -4,12 +4,11 @@ import sys
 from ball import Ball
 from paddle import Paddle
 from block import Block
-from scene.base import BaseScene
-import scene.start
+import scene.base
 import scene.end
 
 
-class CoreScene(BaseScene):
+class CoreScene(scene.base.BaseScene):
 
     level = 0
 

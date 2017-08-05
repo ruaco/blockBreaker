@@ -1,10 +1,10 @@
 import pygame
 import sys
-from scene.base import BaseScene
-from scene.start import StartScene
+import scene.base
+import scene.start
 
 
-class EndScene(BaseScene):
+class EndScene(scene.base.BaseScene):
 
     def __init__(self, game, complete):
         super().__init__(game)
@@ -13,7 +13,7 @@ class EndScene(BaseScene):
         self.register_action(pygame.K_q, sys.exit)
 
     def enter(self):
-        new_s = StartScene(self.game)
+        new_s = scene.start.StartScene(self.game)
         self.game.scene(new_s)
 
     def draw(self):
