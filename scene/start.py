@@ -1,7 +1,7 @@
 import pygame
 import sys
-from scene.base_scene import BaseScene
-from scene.core_scene import CoreScene
+from scene.base import BaseScene
+from scene.core import CoreScene
 
 
 class StartScene(BaseScene):
@@ -17,7 +17,7 @@ class StartScene(BaseScene):
 
     def draw(self):
         self.draw_text('press R to start game', [130, 120])
-        self.draw_text('exit game', [160, 140])
+        self.draw_text('press Q to exit game', [132, 140])
 
     def update(self):
         pass
