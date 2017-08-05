@@ -11,6 +11,8 @@ import scene.end
 
 class CoreScene(BaseScene):
 
+    level = 0
+
     ball = None
     paddle = None
     blocks = []
@@ -42,7 +44,7 @@ class CoreScene(BaseScene):
             if i.collide(ball):
                 i.kill()
                 ball.rebound()
-                self.score += 100
+                self.game.score += 100
 
     def draw(self, **kwargs):
         for i in kwargs.keys():
@@ -77,8 +79,9 @@ class CoreScene(BaseScene):
                 new_s = scene.end.EndScene(self.game, True)
                 self.game.scene(new_s)
         if ball.y+ball.height > self.game.height:
+            self.game.score = 0
             new_s = scene.end.EndScene(self.game, False)
             self.game.scene(new_s)
 
-        self.draw_text('score: ' + str(self.score), [20, 20])
+        self.draw_text('score: ' + str(self.game.score), [20, 20])
 
