@@ -5,12 +5,6 @@ import util
 
 class BaseScene:
 
-    actions = {}
-    keydowns = {}
-
-    score = 0
-    level = 0
-
     ball = None
     paddle = None
     blocks = []
@@ -18,6 +12,8 @@ class BaseScene:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
+        self.actions = {}
+        self.keydowns = {}
 
     def clear(self):
         self.screen.fill([0, 0, 0])
@@ -57,10 +53,6 @@ class BaseScene:
     def run(self):
         self.event_listener()
         actions = self.actions.keys()
-        try:
-            for k in actions:
-                if self.keydowns.get(k):
-                    self.actions.get(k)()
-        # todo 这里有一个数组变化的异常先跳过
-        except RuntimeError:
-            print()
+        for k in actions:
+            if self.keydowns.get(k):
+                self.actions.get(k)()
