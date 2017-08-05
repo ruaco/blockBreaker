@@ -5,6 +5,7 @@ from ball import Ball
 from paddle import Paddle
 from block import Block
 from scene.base_scene import BaseScene
+import scene.end_scene
 
 
 class CoreScene(BaseScene):
@@ -75,6 +76,10 @@ class CoreScene(BaseScene):
             # else:
             #     new_s = StartScene(self.game)
             #     self.game.scene(new_s)
+        if ball.y+ball.height > self.game.height:
+            ...
+            new_s = scene.end_scene.EndScene(self.game, True)
+            self.game.scene(new_s)
 
         self.draw_text('score: ' + str(self.score), [20, 20])
 

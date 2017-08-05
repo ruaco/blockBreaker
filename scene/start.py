@@ -1,6 +1,6 @@
 import pygame
 import sys
-from scene.core_scene import BaseScene
+from scene.base_scene import BaseScene
 from scene.core_scene import CoreScene
 
 
