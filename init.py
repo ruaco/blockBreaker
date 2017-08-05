@@ -8,13 +8,16 @@ class Game:
     _size = width, height = 400, 300
     _fps = 100
     config = load_config_from_file()
+    _title = "打砖块"
 
     s = None
     score = 0
 
     def __init__(self):
         pygame.init()
+        pygame.display.set_caption(self._title)
         screen = pygame.display.set_mode(self._size)
+
         self.screen = screen
 
     def scene(self, new_s):
