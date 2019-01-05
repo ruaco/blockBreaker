@@ -1,5 +1,14 @@
 # 打砖块
 
+游戏需要安装 pygame
+```
+pip3 install -r requirements.txt
+```
+运行游戏
+```
+python3 init.py
+```
+
 ## 初始界面
 
 ![start](images/start.png)
